@@ -17,7 +17,7 @@ var (
 	dirTemplate = template.MustParse(`<html>
 <head><title>Listing of {Path}</title></head>
 <body>
-  {.repeated section Names}<a href="{@}">{@}</a><br>
+  {.repeated section Names}<a href="/{Path}/{@}">{@}</a><br>
   {.end}
 </body>
 </html>
