@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"strconv"
 	"strings"
 	"template"
 )
@@ -83,12 +84,19 @@ func sendFile(w http.ResponseWriter, f *os.File) {
 		http.Error(w, "Server error", 500)
 		return
 	}
-	w.Header().Set("Content-Type", guessMimeType(f.Name()))
+	writeHeaders(w, guessMimeType(f.Name()), len(data))
 	_, err = w.Write(data)
 	if err != nil {
 		http.Error(w, "Server error", 500)
 		return
 	}
+}
+
+func writeHeaders(w http.ResponseWriter, mimeType string, length int) {
+     h := w.Header()
+     h.Set("Cache-Control", "no-cache")    		 
+     h.Set("Content-Type", mimeType)
+     h.Set("Content-Length", strconv.Itoa(length))
 }
 
 func FileServer(w http.ResponseWriter, req *http.Request) {
